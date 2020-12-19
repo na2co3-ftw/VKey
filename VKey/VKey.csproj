@@ -55,6 +55,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="App\Midi.cs" />
+    <Compile Include="App\MusicalKeyboard.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="App\MainForm.resx">

@@ -13,7 +13,8 @@ namespace VKey
     public partial class MainForm : Form
     {
         Midi.MidiOut midiOut;
-        ComputerKeyboard keyboard;
+        MusicalKeyboard musicalKeyboard;
+        ComputerKeyboard computerKeyboard;
         KeyboardHook keyboardHook;
         bool global = false;
 
@@ -32,12 +33,17 @@ namespace VKey
             }
 
             midiOut = new Midi.MidiOut(1);
-            keyboard = new ComputerKeyboard(midiOut, 1);
+            musicalKeyboard = new MusicalKeyboard(midiOut);
+            computerKeyboard = new ComputerKeyboard(musicalKeyboard);
+
+            musicalKeyboard.TransposeChanged += MusicalKeyboard_TransposeChanged;
+            musicalKeyboard.Reset();
         }
 
         private void ResetButton_Click(object sender, EventArgs e)
         {
             this.midiOut.Reset();
+            this.musicalKeyboard.Reset();
         }
 
         private void GlobalCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -47,7 +53,7 @@ namespace VKey
 
             if (this.global)
             {
-                keyboardHook = new KeyboardHook(this.keyboard);
+                keyboardHook = new KeyboardHook(this.computerKeyboard);
             }
             else
             {
@@ -58,14 +64,30 @@ namespace VKey
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            keyboard.KeyDown(e.KeyCode);
+            computerKeyboard.KeyDown(e.KeyCode);
             e.Handled = true;
         }
 
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
-            keyboard.KeyUp(e.KeyCode);
+            computerKeyboard.KeyUp(e.KeyCode);
             e.Handled = true;
+        }
+
+        private void MusicalKeyboard_TransposeChanged(int octave, int transpose)
+        {
+            TransposeLabel.Text = $"Octave: {octave}, Transpose: {transpose}";
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            return false;
+        }
+
+        private void VelocityTrackBar_Scroll(object sender, EventArgs e)
+        {
+            musicalKeyboard.Velocity = VelocityTrackBar.Value;
+            VelocityLabel.Text = $"Velocity: {VelocityTrackBar.Value}";
         }
     }
 }

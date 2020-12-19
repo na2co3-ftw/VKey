@@ -86,6 +86,7 @@ namespace VKey
             Keys.Q, Keys.W, Keys.E, Keys.R, Keys.T, Keys.Y, Keys.U, Keys.I, Keys.O, Keys.P, Keys.Oemtilde, Keys.OemOpenBrackets,
             Keys.A, Keys.S, Keys.D, Keys.F, Keys.G, Keys.H, Keys.J, Keys.K, Keys.L, Keys.Oemplus, Keys.Oem1, Keys.Oem6,
             Keys.Z, Keys.X, Keys.C, Keys.V, Keys.B, Keys.N, Keys.M, Keys.Oemcomma, Keys.OemPeriod, Keys.Oemplus, Keys.OemQuestion, Keys.OemBackslash,
+            Keys.Up, Keys.Down, Keys.Left, Keys.Right
         };
 
         private HookHandle handle;

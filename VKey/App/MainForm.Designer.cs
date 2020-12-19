@@ -30,12 +30,16 @@
         {
             this.ResetButton = new System.Windows.Forms.Button();
             this.GlobalCheckBox = new System.Windows.Forms.CheckBox();
+            this.TransposeLabel = new System.Windows.Forms.Label();
+            this.VelocityLabel = new System.Windows.Forms.Label();
+            this.VelocityTrackBar = new System.Windows.Forms.TrackBar();
+            ((System.ComponentModel.ISupportInitialize)(this.VelocityTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // ResetButton
             // 
             this.ResetButton.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.ResetButton.Location = new System.Drawing.Point(13, 13);
+            this.ResetButton.Location = new System.Drawing.Point(317, 12);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(104, 33);
             this.ResetButton.TabIndex = 0;
@@ -47,7 +51,7 @@
             // 
             this.GlobalCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
             this.GlobalCheckBox.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.GlobalCheckBox.Location = new System.Drawing.Point(13, 71);
+            this.GlobalCheckBox.Location = new System.Drawing.Point(190, 12);
             this.GlobalCheckBox.Name = "GlobalCheckBox";
             this.GlobalCheckBox.Size = new System.Drawing.Size(104, 33);
             this.GlobalCheckBox.TabIndex = 1;
@@ -56,11 +60,44 @@
             this.GlobalCheckBox.UseVisualStyleBackColor = true;
             this.GlobalCheckBox.CheckedChanged += new System.EventHandler(this.GlobalCheckBox_CheckedChanged);
             // 
+            // TransposeLabel
+            // 
+            this.TransposeLabel.AutoSize = true;
+            this.TransposeLabel.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.TransposeLabel.Location = new System.Drawing.Point(12, 21);
+            this.TransposeLabel.Name = "TransposeLabel";
+            this.TransposeLabel.Size = new System.Drawing.Size(0, 15);
+            this.TransposeLabel.TabIndex = 2;
+            // 
+            // VelocityLabel
+            // 
+            this.VelocityLabel.AutoSize = true;
+            this.VelocityLabel.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.VelocityLabel.Location = new System.Drawing.Point(12, 55);
+            this.VelocityLabel.Name = "VelocityLabel";
+            this.VelocityLabel.Size = new System.Drawing.Size(82, 15);
+            this.VelocityLabel.TabIndex = 3;
+            this.VelocityLabel.Text = "Velocity: 100";
+            // 
+            // VelocityTrackBar
+            // 
+            this.VelocityTrackBar.Location = new System.Drawing.Point(159, 51);
+            this.VelocityTrackBar.Maximum = 127;
+            this.VelocityTrackBar.Name = "VelocityTrackBar";
+            this.VelocityTrackBar.Size = new System.Drawing.Size(262, 45);
+            this.VelocityTrackBar.TabIndex = 4;
+            this.VelocityTrackBar.TickFrequency = 8;
+            this.VelocityTrackBar.Value = 100;
+            this.VelocityTrackBar.Scroll += new System.EventHandler(this.VelocityTrackBar_Scroll);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(440, 101);
+            this.Controls.Add(this.VelocityTrackBar);
+            this.Controls.Add(this.VelocityLabel);
+            this.Controls.Add(this.TransposeLabel);
             this.Controls.Add(this.GlobalCheckBox);
             this.Controls.Add(this.ResetButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -70,7 +107,9 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyUp);
+            ((System.ComponentModel.ISupportInitialize)(this.VelocityTrackBar)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -78,5 +117,8 @@
 
         private System.Windows.Forms.Button ResetButton;
         private System.Windows.Forms.CheckBox GlobalCheckBox;
+        private System.Windows.Forms.Label TransposeLabel;
+        private System.Windows.Forms.Label VelocityLabel;
+        private System.Windows.Forms.TrackBar VelocityTrackBar;
     }
 }

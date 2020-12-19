@@ -11,71 +11,79 @@ namespace VKey
     {
         public static readonly Dictionary<Keys, int> KeyMap = new Dictionary<Keys, int>
         {
-            {Keys.Z, 60},
-            {Keys.S, 61},
-            {Keys.X, 62},
-            {Keys.D, 63},
-            {Keys.C, 64},
-            {Keys.V, 65},
-            {Keys.G, 66},
-            {Keys.B, 67},
-            {Keys.H, 68},
-            {Keys.N, 69},
-            {Keys.J, 70},
-            {Keys.M, 71},
-            {Keys.Oemcomma, 72}, // ,
-            {Keys.L, 73},
-            {Keys.OemPeriod, 74}, // .
-            {Keys.Oemplus, 75}, // ;
-            {Keys.OemQuestion, 76}, // /
-            {Keys.OemBackslash, 77}, // \
-            {Keys.OemCloseBrackets, 78}, // ]
+            {Keys.Z, 12},
+            {Keys.S, 13},
+            {Keys.X, 14},
+            {Keys.D, 15},
+            {Keys.C, 16},
+            {Keys.V, 17},
+            {Keys.G, 18},
+            {Keys.B, 19},
+            {Keys.H, 20},
+            {Keys.N, 21},
+            {Keys.J, 22},
+            {Keys.M, 23},
+            {Keys.Oemcomma, 24}, // ,
+            {Keys.L, 25},
+            {Keys.OemPeriod, 26}, // .
+            {Keys.Oemplus, 27}, // ;
+            {Keys.OemQuestion, 28}, // /
+            {Keys.OemBackslash, 29}, // \
+            {Keys.OemCloseBrackets, 30}, // ]
 
-            {Keys.Q, 72},
-            {Keys.D2, 73},
-            {Keys.W, 74},
-            {Keys.D3, 75},
-            {Keys.E, 76},
-            {Keys.R, 77},
-            {Keys.D5, 78},
-            {Keys.T, 79},
-            {Keys.D6, 80},
-            {Keys.Y, 81},
-            {Keys.D7, 82},
-            {Keys.U, 83},
-            {Keys.I, 84},
-            {Keys.D9, 85},
-            {Keys.O, 86},
-            {Keys.D0, 87},
-            {Keys.P, 88},
-            {Keys.Oemtilde, 89}, // @
-            {Keys.Oem7, 90}, // ^
-            {Keys.OemOpenBrackets, 91}, // [
+            {Keys.Q, 24},
+            {Keys.D2, 25},
+            {Keys.W, 26},
+            {Keys.D3, 27},
+            {Keys.E, 28},
+            {Keys.R, 29},
+            {Keys.D5, 30},
+            {Keys.T, 31},
+            {Keys.D6, 32},
+            {Keys.Y, 33},
+            {Keys.D7, 34},
+            {Keys.U, 35},
+            {Keys.I, 36},
+            {Keys.D9, 37},
+            {Keys.O, 38},
+            {Keys.D0, 39},
+            {Keys.P, 40},
+            {Keys.Oemtilde, 41}, // @
+            {Keys.Oem7, 42}, // ^
+            {Keys.OemOpenBrackets, 43}, // [
         };
 
         private Dictionary<Keys, bool> keyStates = new Dictionary<Keys, bool>();
 
-        private Midi.MidiOut midiOut;
-        private int channel;
+        private MusicalKeyboard musicalKeyboard;
 
-        public ComputerKeyboard(Midi.MidiOut midiOut, int channel)
+        public ComputerKeyboard(MusicalKeyboard musicalKeyboard)
         {
-            this.midiOut = midiOut;
-            this.channel = channel;
+            this.musicalKeyboard = musicalKeyboard;
 
             Reset();
         }
+
+        public void Reset()
+        {
+            foreach (var key in KeyMap.Keys)
+            {
+                keyStates[key] = false;
+            }
+        }
+
 
         public void KeyDown(Keys keyCode)
         {
             if (!KeyMap.ContainsKey(keyCode))
             {
+                ProcessKeyPress(keyCode);
                 return;
             }
 
             if (keyStates[keyCode] == false)
             {
-                midiOut.NoteOn(channel, KeyMap[keyCode], 100);
+                musicalKeyboard.NoteOn(KeyMap[keyCode]);
             }
             keyStates[keyCode] = true;
         }
@@ -89,16 +97,27 @@ namespace VKey
 
             if (keyStates[keyCode] == true)
             {
-                midiOut.NoteOff(channel, KeyMap[keyCode]);
+                musicalKeyboard.NoteOff(KeyMap[keyCode]);
             }
             keyStates[keyCode] = false;
         }
 
-        public void Reset()
+        private void ProcessKeyPress(Keys keyCode)
         {
-            foreach (var key in KeyMap.Keys)
+            switch(keyCode)
             {
-                keyStates[key] = false;
+                case Keys.Up:
+                    musicalKeyboard.OctaveUp();
+                    break;
+                case Keys.Down:
+                    musicalKeyboard.OctaveDown();
+                    break;
+                case Keys.Right:
+                    musicalKeyboard.TransposeUp();
+                    break;
+                case Keys.Left:
+                    musicalKeyboard.TransposeDown();
+                    break;
             }
         }
     }
