@@ -33,13 +33,14 @@
             this.TransposeLabel = new System.Windows.Forms.Label();
             this.VelocityLabel = new System.Windows.Forms.Label();
             this.VelocityTrackBar = new System.Windows.Forms.TrackBar();
+            this.DeviceComboBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // ResetButton
             // 
             this.ResetButton.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.ResetButton.Location = new System.Drawing.Point(317, 12);
+            this.ResetButton.Location = new System.Drawing.Point(324, 12);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(104, 33);
             this.ResetButton.TabIndex = 0;
@@ -51,7 +52,7 @@
             // 
             this.GlobalCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
             this.GlobalCheckBox.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.GlobalCheckBox.Location = new System.Drawing.Point(190, 12);
+            this.GlobalCheckBox.Location = new System.Drawing.Point(324, 51);
             this.GlobalCheckBox.Name = "GlobalCheckBox";
             this.GlobalCheckBox.Size = new System.Drawing.Size(104, 33);
             this.GlobalCheckBox.TabIndex = 1;
@@ -64,7 +65,7 @@
             // 
             this.TransposeLabel.AutoSize = true;
             this.TransposeLabel.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.TransposeLabel.Location = new System.Drawing.Point(12, 21);
+            this.TransposeLabel.Location = new System.Drawing.Point(12, 60);
             this.TransposeLabel.Name = "TransposeLabel";
             this.TransposeLabel.Size = new System.Drawing.Size(0, 15);
             this.TransposeLabel.TabIndex = 2;
@@ -73,7 +74,7 @@
             // 
             this.VelocityLabel.AutoSize = true;
             this.VelocityLabel.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.VelocityLabel.Location = new System.Drawing.Point(12, 55);
+            this.VelocityLabel.Location = new System.Drawing.Point(12, 101);
             this.VelocityLabel.Name = "VelocityLabel";
             this.VelocityLabel.Size = new System.Drawing.Size(82, 15);
             this.VelocityLabel.TabIndex = 3;
@@ -81,7 +82,7 @@
             // 
             // VelocityTrackBar
             // 
-            this.VelocityTrackBar.Location = new System.Drawing.Point(159, 51);
+            this.VelocityTrackBar.Location = new System.Drawing.Point(166, 91);
             this.VelocityTrackBar.Maximum = 127;
             this.VelocityTrackBar.Name = "VelocityTrackBar";
             this.VelocityTrackBar.Size = new System.Drawing.Size(262, 45);
@@ -90,11 +91,23 @@
             this.VelocityTrackBar.Value = 100;
             this.VelocityTrackBar.Scroll += new System.EventHandler(this.VelocityTrackBar_Scroll);
             // 
+            // DeviceComboBox
+            // 
+            this.DeviceComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DeviceComboBox.Font = new System.Drawing.Font("Meiryo UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.DeviceComboBox.FormattingEnabled = true;
+            this.DeviceComboBox.Location = new System.Drawing.Point(12, 18);
+            this.DeviceComboBox.Name = "DeviceComboBox";
+            this.DeviceComboBox.Size = new System.Drawing.Size(306, 22);
+            this.DeviceComboBox.TabIndex = 5;
+            this.DeviceComboBox.SelectedIndexChanged += new System.EventHandler(this.DeviceComboBox_SelectedIndexChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 101);
+            this.ClientSize = new System.Drawing.Size(440, 144);
+            this.Controls.Add(this.DeviceComboBox);
             this.Controls.Add(this.VelocityTrackBar);
             this.Controls.Add(this.VelocityLabel);
             this.Controls.Add(this.TransposeLabel);
@@ -120,5 +133,6 @@
         private System.Windows.Forms.Label TransposeLabel;
         private System.Windows.Forms.Label VelocityLabel;
         private System.Windows.Forms.TrackBar VelocityTrackBar;
+        private System.Windows.Forms.ComboBox DeviceComboBox;
     }
 }

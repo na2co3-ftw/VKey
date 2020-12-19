@@ -15,7 +15,7 @@ namespace VKey
         Midi.MidiOut midiOut;
         MusicalKeyboard musicalKeyboard;
         ComputerKeyboard computerKeyboard;
-        KeyboardHook keyboardHook;
+        Hook.KeyboardHook keyboardHook;
         bool global = false;
 
         public MainForm()
@@ -26,18 +26,54 @@ namespace VKey
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var count = Midi.MidiOut.GetDeviceNum();
-            foreach (var id in Enumerable.Range(0, count))
-            {
-                Console.WriteLine(Midi.MidiOut.GetDeviceName(id));
-            }
+            InitDeviceCombobox();
 
-            midiOut = new Midi.MidiOut(1);
-            musicalKeyboard = new MusicalKeyboard(midiOut);
+            musicalKeyboard = new MusicalKeyboard();
             computerKeyboard = new ComputerKeyboard(musicalKeyboard);
+
+            DeviceChanged();
 
             musicalKeyboard.TransposeChanged += MusicalKeyboard_TransposeChanged;
             musicalKeyboard.Reset();
+        }
+
+        private void InitDeviceCombobox()
+        {
+            DataTable deviceTable = new DataTable();
+            deviceTable.Columns.Add("id", typeof(int));
+            deviceTable.Columns.Add("name", typeof(string));
+
+            foreach (var device in Midi.MidiOut.GetDevices())
+            {
+                var row = deviceTable.NewRow();
+                row["id"] = device.Item1;
+                row["name"] = device.Item2;
+                deviceTable.Rows.Add(row);
+            }
+
+            deviceTable.AcceptChanges();
+
+            DeviceComboBox.DisplayMember = "name";
+            DeviceComboBox.ValueMember = "id";
+            DeviceComboBox.DataSource = deviceTable;
+
+            DeviceComboBox.SelectedIndex = 0;
+        }
+
+        private void DeviceChanged()
+        {
+            var deviceId = (int)DeviceComboBox.SelectedValue;
+
+            if (midiOut != null)
+            {
+                midiOut.Dispose();
+            }
+            midiOut = new Midi.MidiOut(deviceId);
+
+            if (musicalKeyboard != null)
+            {
+                musicalKeyboard.SetMidiOut(midiOut);
+            }
         }
 
         private void ResetButton_Click(object sender, EventArgs e)
@@ -53,7 +89,7 @@ namespace VKey
 
             if (this.global)
             {
-                keyboardHook = new KeyboardHook(this.computerKeyboard);
+                keyboardHook = new Hook.KeyboardHook(this.computerKeyboard);
             }
             else
             {
@@ -88,6 +124,11 @@ namespace VKey
         {
             musicalKeyboard.Velocity = VelocityTrackBar.Value;
             VelocityLabel.Text = $"Velocity: {VelocityTrackBar.Value}";
+        }
+
+        private void DeviceComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DeviceChanged();
         }
     }
 }

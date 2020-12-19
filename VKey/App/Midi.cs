@@ -94,6 +94,19 @@ namespace VKey.Midi
             return midiOutCaps.szPname;
         }
 
+        public static IEnumerable<Tuple<int, string>> GetDevices()
+        {
+            var devices = new List<Tuple<int, string>>
+            {
+                new Tuple<int, string>(-1, "Auto")
+            };
+
+            devices.AddRange(
+                Enumerable.Range(0, GetDeviceNum())
+                .Select(id => new Tuple<int, string>(id, GetDeviceName(id))));
+            return devices;
+        }
+
         private MidiOutHandle handle;
 
         public MidiOut(int deviceId)

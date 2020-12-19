@@ -16,11 +16,10 @@ namespace VKey
         public int Octave { get; set; } = 4;
         public int Transpose { get; set; } = 0;
 
-        private readonly Midi.MidiOut midiOut;
+        private Midi.MidiOut midiOut;
 
-        public MusicalKeyboard(Midi.MidiOut midiOut)
+        public MusicalKeyboard()
         {
-            this.midiOut = midiOut;
         }
 
         public void Reset()
@@ -28,6 +27,11 @@ namespace VKey
             Octave = 4;
             Transpose = 0;
             TransposeChanged(Octave, Transpose);
+        }
+
+        public void SetMidiOut(Midi.MidiOut midiOut)
+        {
+            this.midiOut = midiOut;
         }
 
         public void NoteOn(int note)
@@ -38,7 +42,7 @@ namespace VKey
                 return;
             }
 
-            midiOut.NoteOn(Channel, transposed.Value, Velocity);
+            midiOut?.NoteOn(Channel, transposed.Value, Velocity);
         }
 
         public void NoteOff(int note)
@@ -77,7 +81,7 @@ namespace VKey
         public void TransposeUp()
         {
             Transpose++;
-            if (Transpose > 12)
+            if (Transpose >= 12)
             {
                 Octave++;
                 Transpose -= 12;
@@ -89,7 +93,7 @@ namespace VKey
         public void TransposeDown()
         {
             Transpose--;
-            if (Transpose < -12)
+            if (Transpose <= -12)
             {
                 Octave--;
                 Transpose += 12;
