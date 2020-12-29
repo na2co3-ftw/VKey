@@ -86,6 +86,8 @@ namespace VKey
         {
             this.global = this.GlobalCheckBox.Checked;
             this.GlobalCheckBox.Text = this.global ? "Global" : "Local";
+            this.TopMost = this.global;
+            this.Text = this.global ? "VKey [Global]" : "VKey";
 
             if (this.global)
             {
