@@ -14,6 +14,7 @@ namespace VKey
     {
         Midi.MidiOut midiOut;
         MusicalKeyboard musicalKeyboard;
+        Transposer transposer;
         ComputerKeyboard computerKeyboard;
         Hook.KeyboardHook keyboardHook;
         bool global = false;
@@ -29,12 +30,13 @@ namespace VKey
             InitDeviceCombobox();
 
             musicalKeyboard = new MusicalKeyboard();
-            computerKeyboard = new ComputerKeyboard(musicalKeyboard);
+            transposer = new Transposer();
+            computerKeyboard = new ComputerKeyboard(musicalKeyboard, transposer);
 
             DeviceChanged();
 
-            musicalKeyboard.TransposeChanged += MusicalKeyboard_TransposeChanged;
-            musicalKeyboard.Reset();
+            transposer.TransposeChanged += MusicalKeyboard_TransposeChanged;
+            transposer.Reset();
         }
 
         private void InitDeviceCombobox()
@@ -79,7 +81,7 @@ namespace VKey
         private void ResetButton_Click(object sender, EventArgs e)
         {
             this.midiOut.Reset();
-            this.musicalKeyboard.Reset();
+            this.transposer.Reset();
         }
 
         private void GlobalCheckBox_CheckedChanged(object sender, EventArgs e)

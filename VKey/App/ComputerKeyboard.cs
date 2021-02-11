@@ -53,13 +53,21 @@ namespace VKey
             {Keys.OemOpenBrackets, 43}, // [
         };
 
-        private Dictionary<Keys, bool> keyStates = new Dictionary<Keys, bool>();
+        private struct KeyState
+        {
+            public bool pressed;
+            public int? note;
+        }
+
+        private Dictionary<Keys, KeyState> keyStates = new Dictionary<Keys, KeyState>();
 
         private MusicalKeyboard musicalKeyboard;
+        private Transposer transposer;
 
-        public ComputerKeyboard(MusicalKeyboard musicalKeyboard)
+        public ComputerKeyboard(MusicalKeyboard musicalKeyboard, Transposer transposer)
         {
             this.musicalKeyboard = musicalKeyboard;
+            this.transposer = transposer;
 
             Reset();
         }
@@ -68,7 +76,7 @@ namespace VKey
         {
             foreach (var key in KeyMap.Keys)
             {
-                keyStates[key] = false;
+                keyStates[key] = new KeyState { pressed = false, note = null };
             }
         }
 
@@ -81,11 +89,15 @@ namespace VKey
                 return;
             }
 
-            if (keyStates[keyCode] == false)
+            if (keyStates[keyCode].pressed == false)
             {
-                musicalKeyboard.NoteOn(KeyMap[keyCode]);
+                var note = transposer.GetTransposedNote(KeyMap[keyCode]);
+                if (note.HasValue)
+                {
+                    musicalKeyboard.NoteOn(note.Value);
+                }
+                keyStates[keyCode] = new KeyState { pressed = true, note = note };
             }
-            keyStates[keyCode] = true;
         }
 
         public void KeyUp(Keys keyCode)
@@ -95,11 +107,15 @@ namespace VKey
                 return;
             }
 
-            if (keyStates[keyCode] == true)
+            if (keyStates[keyCode].pressed == true)
             {
-                musicalKeyboard.NoteOff(KeyMap[keyCode]);
+                var note = keyStates[keyCode].note;
+                if (note.HasValue)
+                {
+                    musicalKeyboard.NoteOff(note.Value);
+                }
             }
-            keyStates[keyCode] = false;
+            keyStates[keyCode] = new KeyState { pressed = false, note = null };
         }
 
         private void ProcessKeyPress(Keys keyCode)
@@ -107,16 +123,16 @@ namespace VKey
             switch(keyCode)
             {
                 case Keys.Up:
-                    musicalKeyboard.OctaveUp();
+                    transposer.OctaveUp();
                     break;
                 case Keys.Down:
-                    musicalKeyboard.OctaveDown();
+                    transposer.OctaveDown();
                     break;
                 case Keys.Right:
-                    musicalKeyboard.TransposeUp();
+                    transposer.TransposeUp();
                     break;
                 case Keys.Left:
-                    musicalKeyboard.TransposeDown();
+                    transposer.TransposeDown();
                     break;
             }
         }
