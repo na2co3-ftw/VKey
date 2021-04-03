@@ -100,7 +100,7 @@
             this.DeviceComboBox.Name = "DeviceComboBox";
             this.DeviceComboBox.Size = new System.Drawing.Size(306, 22);
             this.DeviceComboBox.TabIndex = 5;
-            this.DeviceComboBox.SelectedIndexChanged += new System.EventHandler(this.DeviceComboBox_SelectedIndexChanged);
+            this.DeviceComboBox.SelectionChangeCommitted += new System.EventHandler(this.DeviceComboBox_SelectionChangeCommitted);
             // 
             // MainForm
             // 

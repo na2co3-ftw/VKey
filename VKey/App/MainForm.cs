@@ -41,18 +41,19 @@ namespace VKey
 
         private void InitDeviceCombobox()
         {
-            DataTable deviceTable = new DataTable();
+            var deviceTable = new DataTable();
             deviceTable.Columns.Add("id", typeof(int));
             deviceTable.Columns.Add("name", typeof(string));
 
-            foreach (var device in Midi.MidiOut.GetDevices())
+            IEnumerable<Tuple<int, string>> devices = Midi.MidiOut.GetDevices();
+
+            foreach (var device in devices)
             {
                 var row = deviceTable.NewRow();
                 row["id"] = device.Item1;
                 row["name"] = device.Item2;
                 deviceTable.Rows.Add(row);
             }
-
             deviceTable.AcceptChanges();
 
             DeviceComboBox.DisplayMember = "name";
@@ -60,6 +61,24 @@ namespace VKey
             DeviceComboBox.DataSource = deviceTable;
 
             DeviceComboBox.SelectedIndex = 0;
+            LoadDeviceSetting(devices);
+        }
+
+        private void LoadDeviceSetting(IEnumerable<Tuple<int, string>> devices)
+        {
+            var settingDeviceName = Properties.Settings.Default.MidiDeviceName;
+            if (settingDeviceName == null || !settingDeviceName.Any())
+            {
+                return;
+            }
+
+            var settingDevice = devices.FirstOrDefault(x => x.Item2 == settingDeviceName);
+            if (settingDevice == null)
+            {
+                return;
+            }
+
+            DeviceComboBox.SelectedValue = settingDevice.Item1;
         }
 
         private void DeviceChanged()
@@ -76,6 +95,14 @@ namespace VKey
             {
                 musicalKeyboard.SetMidiOut(midiOut);
             }
+
+            StoreDeviceSetting();
+        }
+
+        private void StoreDeviceSetting()
+        {
+            Properties.Settings.Default.MidiDeviceName = (string)((DataRowView)DeviceComboBox.SelectedItem)["name"];
+            Properties.Settings.Default.Save();
         }
 
         private void ResetButton_Click(object sender, EventArgs e)
@@ -130,7 +157,7 @@ namespace VKey
             VelocityLabel.Text = $"Velocity: {VelocityTrackBar.Value}";
         }
 
-        private void DeviceComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void DeviceComboBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
             DeviceChanged();
         }
