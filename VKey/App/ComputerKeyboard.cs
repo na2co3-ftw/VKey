@@ -51,6 +51,7 @@ namespace VKey
             {Keys.Oemtilde, 41}, // @
             {Keys.Oem7, 42}, // ^
             {Keys.OemOpenBrackets, 43}, // [
+            {Keys.Oem5, 44}, // ¥
         };
 
         private struct KeyState
