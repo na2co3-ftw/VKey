@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\ComputerKeyboard.cs" />
+    <Compile Include="App\Hotkey.cs" />
     <Compile Include="App\KeyboardHook.cs" />
     <Compile Include="App\MainForm.cs">
       <SubType>Form</SubType>

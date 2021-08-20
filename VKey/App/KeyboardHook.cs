@@ -117,6 +117,12 @@ namespace VKey.Hook
                 return NativeMethods.CallNextHookEx(this.handle, nCode, wParam, lParam);
             }
 
+            if ((Control.ModifierKeys & Keys.Control) == Keys.Control
+                || (Control.ModifierKeys & Keys.Alt) == Keys.Alt)
+            {
+                return NativeMethods.CallNextHookEx(this.handle, nCode, wParam, lParam);
+            }
+
             if (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN)
             {
                 var keyInfo = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);

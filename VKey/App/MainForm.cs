@@ -17,6 +17,8 @@ namespace VKey
         Transposer transposer;
         ComputerKeyboard computerKeyboard;
         Hook.KeyboardHook keyboardHook;
+        Hotkey.Hotkey globalHotkey;
+
         bool global = false;
 
         public MainForm()
@@ -37,6 +39,8 @@ namespace VKey
 
             transposer.TransposeChanged += MusicalKeyboard_TransposeChanged;
             transposer.Reset();
+
+            globalHotkey = new Hotkey.Hotkey(Handle, Keys.K, controlKey: true, altKey: true);
         }
 
         private void InitDeviceCombobox()
@@ -126,6 +130,16 @@ namespace VKey
             {
                 keyboardHook.Dispose();
                 keyboardHook = null;
+            }
+        }
+
+        protected override void WndProc(ref Message message)
+        {
+            base.WndProc(ref message);
+
+            if (globalHotkey != null && globalHotkey.IsPressed(message))
+            {
+                this.GlobalCheckBox.Checked = !this.GlobalCheckBox.Checked;
             }
         }
 
