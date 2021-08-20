@@ -113,7 +113,7 @@
             this.Controls.Add(this.TransposeLabel);
             this.Controls.Add(this.GlobalCheckBox);
             this.Controls.Add(this.ResetButton);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "VKey";
