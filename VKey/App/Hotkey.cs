@@ -33,18 +33,14 @@ namespace VKey.Hotkey
 
         static int lastId = 0;
 
-        private readonly IntPtr handle;
-        public readonly int id;
-
-        public HotkeyRegistration(
+        public static HotkeyRegistration Register(
             IntPtr handle,
             Keys key,
             bool altKey = false,
             bool controlKey = false,
             bool shiftKey = false)
         {
-            id = ++lastId;
-            this.handle = handle;
+            int id = ++lastId;
 
             uint modifiers = 0;
             if (altKey)
@@ -60,7 +56,21 @@ namespace VKey.Hotkey
                 modifiers |= NativeMethods.MOD_SHIFT;
             }
 
-            NativeMethods.RegisterHotKey(handle, id, modifiers, (uint)key);
+            if (NativeMethods.RegisterHotKey(handle, id, modifiers, (uint)key))
+            {
+                return new HotkeyRegistration(handle, id);
+            }
+
+            return null;
+        }
+
+        private readonly IntPtr handle;
+        public readonly int id;
+
+        private HotkeyRegistration(IntPtr handle, int id)
+        {
+            this.handle = handle;
+            this.id = id;
         }
 
         public bool IsPressed(Message message)

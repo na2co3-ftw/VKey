@@ -39,7 +39,8 @@ namespace VKey
             transposer.TransposeChanged += MusicalKeyboard_TransposeChanged;
             transposer.Reset();
 
-            globalHotkey = new HotkeyRegistration(Handle, Keys.K, controlKey: true, altKey: true);
+            globalHotkey = HotkeyRegistration.Register(Handle, Keys.K, controlKey: true, altKey: true);
+            GlobalHotkeyLabel.Visible = globalHotkey != null;
         }
 
         private void InitDeviceCombobox()
@@ -114,7 +115,7 @@ namespace VKey
 
             GlobalCheckBox.Text = global ? "Global" : "Local";
             this.TopMost = global;
-            this.Text = global ? "VKey [Global]" : "VKey";
+            this.Text = global ? "VKey (Global)" : "VKey";
 
             if (global)
             {
@@ -151,7 +152,7 @@ namespace VKey
 
         private void MusicalKeyboard_TransposeChanged(int octave, int transpose)
         {
-            TransposeLabel.Text = $"Octave: {octave}, Transpose: {transpose}";
+            TransposeLabel.Text = $"[⇅] Octave: {octave} / [⇄] Transpose: {transpose}";
         }
 
         protected override bool ProcessDialogKey(Keys keyData)

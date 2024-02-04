@@ -34,13 +34,14 @@
             this.VelocityLabel = new System.Windows.Forms.Label();
             this.VelocityTrackBar = new System.Windows.Forms.TrackBar();
             this.DeviceComboBox = new System.Windows.Forms.ComboBox();
+            this.GlobalHotkeyLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.VelocityTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // ResetButton
             // 
             this.ResetButton.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.ResetButton.Location = new System.Drawing.Point(324, 12);
+            this.ResetButton.Location = new System.Drawing.Point(336, 12);
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(104, 33);
             this.ResetButton.TabIndex = 0;
@@ -52,7 +53,7 @@
             // 
             this.GlobalCheckBox.Appearance = System.Windows.Forms.Appearance.Button;
             this.GlobalCheckBox.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.GlobalCheckBox.Location = new System.Drawing.Point(324, 51);
+            this.GlobalCheckBox.Location = new System.Drawing.Point(336, 51);
             this.GlobalCheckBox.Name = "GlobalCheckBox";
             this.GlobalCheckBox.Size = new System.Drawing.Size(104, 33);
             this.GlobalCheckBox.TabIndex = 1;
@@ -82,10 +83,10 @@
             // 
             // VelocityTrackBar
             // 
-            this.VelocityTrackBar.Location = new System.Drawing.Point(166, 91);
+            this.VelocityTrackBar.Location = new System.Drawing.Point(115, 90);
             this.VelocityTrackBar.Maximum = 127;
             this.VelocityTrackBar.Name = "VelocityTrackBar";
-            this.VelocityTrackBar.Size = new System.Drawing.Size(262, 45);
+            this.VelocityTrackBar.Size = new System.Drawing.Size(325, 45);
             this.VelocityTrackBar.TabIndex = 4;
             this.VelocityTrackBar.TickFrequency = 8;
             this.VelocityTrackBar.Value = 100;
@@ -98,15 +99,26 @@
             this.DeviceComboBox.FormattingEnabled = true;
             this.DeviceComboBox.Location = new System.Drawing.Point(12, 18);
             this.DeviceComboBox.Name = "DeviceComboBox";
-            this.DeviceComboBox.Size = new System.Drawing.Size(306, 22);
+            this.DeviceComboBox.Size = new System.Drawing.Size(318, 22);
             this.DeviceComboBox.TabIndex = 5;
             this.DeviceComboBox.SelectionChangeCommitted += new System.EventHandler(this.DeviceComboBox_SelectionChangeCommitted);
+            // 
+            // GlobalHotkeyLabel
+            // 
+            this.GlobalHotkeyLabel.Font = new System.Drawing.Font("Meiryo UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.GlobalHotkeyLabel.Location = new System.Drawing.Point(238, 60);
+            this.GlobalHotkeyLabel.Name = "GlobalHotkeyLabel";
+            this.GlobalHotkeyLabel.Size = new System.Drawing.Size(92, 15);
+            this.GlobalHotkeyLabel.TabIndex = 6;
+            this.GlobalHotkeyLabel.Text = "[Ctrl+Alt+K]";
+            this.GlobalHotkeyLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(440, 144);
+            this.ClientSize = new System.Drawing.Size(452, 144);
+            this.Controls.Add(this.GlobalHotkeyLabel);
             this.Controls.Add(this.DeviceComboBox);
             this.Controls.Add(this.VelocityTrackBar);
             this.Controls.Add(this.VelocityLabel);
@@ -134,5 +146,6 @@
         private System.Windows.Forms.Label VelocityLabel;
         private System.Windows.Forms.TrackBar VelocityTrackBar;
         private System.Windows.Forms.ComboBox DeviceComboBox;
+        private System.Windows.Forms.Label GlobalHotkeyLabel;
     }
 }
