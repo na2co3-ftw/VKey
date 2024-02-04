@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ResetButton = new System.Windows.Forms.Button();
             this.GlobalCheckBox = new System.Windows.Forms.CheckBox();
             this.TransposeLabel = new System.Windows.Forms.Label();
@@ -127,6 +128,7 @@
             this.Controls.Add(this.GlobalCheckBox);
             this.Controls.Add(this.ResetButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "VKey";
