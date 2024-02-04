@@ -34,13 +34,13 @@ namespace VKey
             transposer = new Transposer();
             computerKeyboard = new ComputerKeyboard(musicalKeyboard, transposer);
 
-            DeviceChanged();
-
             transposer.TransposeChanged += MusicalKeyboard_TransposeChanged;
             transposer.Reset();
 
             globalHotkey = HotkeyRegistration.Register(Handle, Keys.K, controlKey: true, altKey: true);
             GlobalHotkeyLabel.Visible = globalHotkey != null;
+
+            DeviceChanged();
         }
 
         private void InitDeviceCombobox()
@@ -89,10 +89,12 @@ namespace VKey
         {
             var deviceId = (int)DeviceComboBox.SelectedValue;
 
+            computerKeyboard.Reset();
+
             midiOut?.Dispose();
             midiOut = new MidiOut(deviceId);
 
-            musicalKeyboard?.SetMidiOut(midiOut);
+            musicalKeyboard.SetMidiOut(midiOut);
 
             StoreDeviceSetting();
         }
@@ -105,8 +107,8 @@ namespace VKey
 
         private void ResetButton_Click(object sender, EventArgs e)
         {
+            computerKeyboard.Reset();
             midiOut.Reset();
-            transposer.Reset();
         }
 
         private void GlobalCheckBox_CheckedChanged(object sender, EventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace VKey
@@ -66,23 +67,17 @@ namespace VKey
             this.musicalKeyboard = musicalKeyboard;
             this.transposer = transposer;
 
-            Reset();
-        }
-
-        public void Reset()
-        {
             foreach (var key in KeyMap.Keys)
             {
                 keyStates[key] = new KeyState { pressed = false, note = null };
             }
         }
 
-
         public void KeyDown(Keys keyCode)
         {
             if (!KeyMap.ContainsKey(keyCode))
             {
-                ProcessKeyPress(keyCode);
+                ProcessKeyCommand(keyCode);
                 return;
             }
 
@@ -115,7 +110,7 @@ namespace VKey
             keyStates[keyCode] = new KeyState { pressed = false, note = null };
         }
 
-        private void ProcessKeyPress(Keys keyCode)
+        private void ProcessKeyCommand(Keys keyCode)
         {
             switch(keyCode)
             {
@@ -131,6 +126,22 @@ namespace VKey
                 case Keys.Left:
                     transposer.TransposeDown();
                     break;
+            }
+        }
+
+        public void Reset()
+        {
+            foreach (var keyCode in keyStates.Keys.ToList())
+            {
+                if (keyStates[keyCode].pressed == true)
+                {
+                    var note = keyStates[keyCode].note;
+                    if (note.HasValue)
+                    {
+                        musicalKeyboard.NoteOff(note.Value);
+                    }
+                }
+                keyStates[keyCode] = new KeyState { pressed = false, note = null };
             }
         }
     }

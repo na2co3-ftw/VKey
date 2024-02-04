@@ -116,6 +116,7 @@ namespace VKey.Midi
         {
             if (handle != null && !handle.IsInvalid)
             {
+                Reset();
                 handle.Dispose();
             }
         }

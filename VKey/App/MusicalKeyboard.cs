@@ -25,7 +25,7 @@ namespace VKey
 
         public void NoteOff(int note)
         {
-            midiOut.NoteOff(Channel, note);
+            midiOut?.NoteOff(Channel, note);
         }
     }
 }
