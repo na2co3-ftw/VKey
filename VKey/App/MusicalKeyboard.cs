@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using VKey.Midi;
 
 namespace VKey
 {
@@ -11,7 +7,7 @@ namespace VKey
         public int Channel { get; set; } = 1;
         public int Velocity { get; set; } = 100;
 
-        private Midi.MidiOut midiOut;
+        private MidiOut midiOut;
 
         public MusicalKeyboard()
         {

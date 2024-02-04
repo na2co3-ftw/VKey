@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VKey.Midi
 {
@@ -71,12 +69,12 @@ namespace VKey.Midi
         {
         }
 
-        public override bool IsInvalid => this.handle == IntPtr.Zero;
+        public override bool IsInvalid => handle == IntPtr.Zero;
 
         protected override bool ReleaseHandle()
         {
-            NativeMethods.midiOutClose(this.handle);
-            this.handle = IntPtr.Zero;
+            NativeMethods.midiOutClose(handle);
+            handle = IntPtr.Zero;
             return true;
         }
     }
@@ -94,42 +92,42 @@ namespace VKey.Midi
             return midiOutCaps.szPname;
         }
 
-        public static IEnumerable<Tuple<int, string>> GetDevices()
+        public static IEnumerable<MidiDevice> GetDevices()
         {
-            var devices = new List<Tuple<int, string>>
+            var devices = new List<MidiDevice>
             {
-                new Tuple<int, string>(-1, "Auto")
+                new MidiDevice { Id = -1, Name = "Auto" }
             };
 
             devices.AddRange(
                 Enumerable.Range(0, GetDeviceNum())
-                .Select(id => new Tuple<int, string>(id, GetDeviceName(id))));
+                .Select(id => new MidiDevice { Id = id, Name = GetDeviceName(id) }));
             return devices;
         }
 
-        private MidiOutHandle handle;
+        private readonly MidiOutHandle handle;
 
         public MidiOut(int deviceId)
         {
-            NativeMethods.midiOutOpen(out this.handle, (uint)deviceId, IntPtr.Zero, IntPtr.Zero, CallbackFlag.CALLBACK_NULL);
+            NativeMethods.midiOutOpen(out handle, (uint)deviceId, IntPtr.Zero, IntPtr.Zero, CallbackFlag.CALLBACK_NULL);
         }
 
         public void Dispose()
         {
-            if (this.handle != null && !this.handle.IsInvalid)
+            if (handle != null && !handle.IsInvalid)
             {
-                this.handle.Dispose();
+                handle.Dispose();
             }
         }
 
         public void SendMessage(uint message)
         {
-            if (this.handle == null || this.handle.IsInvalid)
+            if (handle == null || handle.IsInvalid)
             {
                 return;
             }
 
-            NativeMethods.midiOutShortMsg(this.handle, message);
+            NativeMethods.midiOutShortMsg(handle, message);
         }
 
         public void SendMessage(MidiMessage message)
@@ -139,12 +137,12 @@ namespace VKey.Midi
 
         public void Reset()
         {
-            if (this.handle == null || this.handle.IsInvalid)
+            if (handle == null || handle.IsInvalid)
             {
                 return;
             }
 
-            NativeMethods.midiOutReset(this.handle);
+            NativeMethods.midiOutReset(handle);
         }
 
         public void NoteOn(int channel, int note, int velocity)
@@ -168,6 +166,12 @@ namespace VKey.Midi
                 Value2 = velocity
             });
         }
+    }
+
+    public class MidiDevice
+    {
+        public int Id;
+        public string Name;
     }
 
     public enum MidiMessageType

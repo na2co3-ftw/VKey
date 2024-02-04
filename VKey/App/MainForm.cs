@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using VKey.Hook;
+using VKey.Hotkey;
+using VKey.Midi;
 
 namespace VKey
 {
     public partial class MainForm : Form
     {
-        Midi.MidiOut midiOut;
+        MidiOut midiOut;
         MusicalKeyboard musicalKeyboard;
         Transposer transposer;
         ComputerKeyboard computerKeyboard;
-        Hook.KeyboardHook keyboardHook;
-        Hotkey.Hotkey globalHotkey;
+        KeyboardHook keyboardHook;
+        HotkeyRegistration globalHotkey;
 
         bool global = false;
 
@@ -40,7 +39,7 @@ namespace VKey
             transposer.TransposeChanged += MusicalKeyboard_TransposeChanged;
             transposer.Reset();
 
-            globalHotkey = new Hotkey.Hotkey(Handle, Keys.K, controlKey: true, altKey: true);
+            globalHotkey = new HotkeyRegistration(Handle, Keys.K, controlKey: true, altKey: true);
         }
 
         private void InitDeviceCombobox()
@@ -49,13 +48,13 @@ namespace VKey
             deviceTable.Columns.Add("id", typeof(int));
             deviceTable.Columns.Add("name", typeof(string));
 
-            IEnumerable<Tuple<int, string>> devices = Midi.MidiOut.GetDevices();
+            IEnumerable<MidiDevice> devices = MidiOut.GetDevices();
 
             foreach (var device in devices)
             {
                 var row = deviceTable.NewRow();
-                row["id"] = device.Item1;
-                row["name"] = device.Item2;
+                row["id"] = device.Id;
+                row["name"] = device.Name;
                 deviceTable.Rows.Add(row);
             }
             deviceTable.AcceptChanges();
@@ -68,37 +67,31 @@ namespace VKey
             LoadDeviceSetting(devices);
         }
 
-        private void LoadDeviceSetting(IEnumerable<Tuple<int, string>> devices)
+        private void LoadDeviceSetting(IEnumerable<MidiDevice> devices)
         {
             var settingDeviceName = Properties.Settings.Default.MidiDeviceName;
-            if (settingDeviceName == null || !settingDeviceName.Any())
+            if (string.IsNullOrEmpty(settingDeviceName))
             {
                 return;
             }
 
-            var settingDevice = devices.FirstOrDefault(x => x.Item2 == settingDeviceName);
+            var settingDevice = devices.FirstOrDefault(x => x.Name == settingDeviceName);
             if (settingDevice == null)
             {
                 return;
             }
 
-            DeviceComboBox.SelectedValue = settingDevice.Item1;
+            DeviceComboBox.SelectedValue = settingDevice.Id;
         }
 
         private void DeviceChanged()
         {
             var deviceId = (int)DeviceComboBox.SelectedValue;
 
-            if (midiOut != null)
-            {
-                midiOut.Dispose();
-            }
-            midiOut = new Midi.MidiOut(deviceId);
+            midiOut?.Dispose();
+            midiOut = new MidiOut(deviceId);
 
-            if (musicalKeyboard != null)
-            {
-                musicalKeyboard.SetMidiOut(midiOut);
-            }
+            musicalKeyboard?.SetMidiOut(midiOut);
 
             StoreDeviceSetting();
         }
@@ -111,20 +104,21 @@ namespace VKey
 
         private void ResetButton_Click(object sender, EventArgs e)
         {
-            this.midiOut.Reset();
-            this.transposer.Reset();
+            midiOut.Reset();
+            transposer.Reset();
         }
 
         private void GlobalCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            this.global = this.GlobalCheckBox.Checked;
-            this.GlobalCheckBox.Text = this.global ? "Global" : "Local";
-            this.TopMost = this.global;
-            this.Text = this.global ? "VKey [Global]" : "VKey";
+            global = GlobalCheckBox.Checked;
 
-            if (this.global)
+            GlobalCheckBox.Text = global ? "Global" : "Local";
+            this.TopMost = global;
+            this.Text = global ? "VKey [Global]" : "VKey";
+
+            if (global)
             {
-                keyboardHook = new Hook.KeyboardHook(this.computerKeyboard);
+                keyboardHook = new KeyboardHook(computerKeyboard);
             }
             else
             {
@@ -139,7 +133,7 @@ namespace VKey
 
             if (globalHotkey != null && globalHotkey.IsPressed(message))
             {
-                this.GlobalCheckBox.Checked = !this.GlobalCheckBox.Checked;
+                GlobalCheckBox.Checked = !GlobalCheckBox.Checked;
             }
         }
 

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VKey.Hotkey
@@ -31,23 +27,23 @@ namespace VKey.Hotkey
         );
     }
 
-    public class Hotkey : IDisposable
+    public class HotkeyRegistration : IDisposable
     {
         private const int WM_HOTKEY = 0x0312;
 
         static int lastId = 0;
 
-        private IntPtr handle;
+        private readonly IntPtr handle;
         public readonly int id;
 
-        public Hotkey(
+        public HotkeyRegistration(
             IntPtr handle,
             Keys key,
             bool altKey = false,
             bool controlKey = false,
             bool shiftKey = false)
         {
-            this.id = ++lastId;
+            id = ++lastId;
             this.handle = handle;
 
             uint modifiers = 0;

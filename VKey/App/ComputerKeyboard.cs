@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace VKey
@@ -60,10 +56,10 @@ namespace VKey
             public int? note;
         }
 
-        private Dictionary<Keys, KeyState> keyStates = new Dictionary<Keys, KeyState>();
+        private readonly Dictionary<Keys, KeyState> keyStates = new Dictionary<Keys, KeyState>();
 
-        private MusicalKeyboard musicalKeyboard;
-        private Transposer transposer;
+        private readonly MusicalKeyboard musicalKeyboard;
+        private readonly Transposer transposer;
 
         public ComputerKeyboard(MusicalKeyboard musicalKeyboard, Transposer transposer)
         {

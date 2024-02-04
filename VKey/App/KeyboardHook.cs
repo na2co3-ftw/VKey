@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace VKey.Hook
@@ -60,14 +57,14 @@ namespace VKey.Hook
         {
         }
 
-        public override bool IsInvalid => this.handle == IntPtr.Zero;
+        public override bool IsInvalid => handle == IntPtr.Zero;
 
         protected override bool ReleaseHandle()
         {
-            var isSucceeded= NativeMethods.UnhookWindowsHookEx(this.handle);
+            var isSucceeded= NativeMethods.UnhookWindowsHookEx(handle);
             if (isSucceeded)
             {
-                this.handle = IntPtr.Zero;
+                handle = IntPtr.Zero;
             }
             return isSucceeded;
         }
@@ -89,24 +86,22 @@ namespace VKey.Hook
             Keys.Up, Keys.Down, Keys.Left, Keys.Right
         };
 
-        private HookHandle handle;
-        private NativeMethods.HookProc proc;
+        private readonly HookHandle handle;
 
-        private ComputerKeyboard keyboard;
+        private readonly ComputerKeyboard keyboard;
 
         public KeyboardHook(ComputerKeyboard keyboard)
         {
             this.keyboard = keyboard;
-            this.proc = KeyboardProc;
 
-            this.handle = NativeMethods.SetWindowsHookEx(HookType.WH_KEYBOARD_LL, this.proc, IntPtr.Zero, 0);
+            handle = NativeMethods.SetWindowsHookEx(HookType.WH_KEYBOARD_LL, KeyboardProc, IntPtr.Zero, 0);
         }
 
         public void Dispose()
         {
-            if (this.handle != null && !this.handle.IsInvalid)
+            if (handle != null && !handle.IsInvalid)
             {
-                this.handle.Dispose();
+                handle.Dispose();
             }
         }
 
@@ -114,13 +109,13 @@ namespace VKey.Hook
         {
             if (nCode < 0)
             {
-                return NativeMethods.CallNextHookEx(this.handle, nCode, wParam, lParam);
+                return NativeMethods.CallNextHookEx(handle, nCode, wParam, lParam);
             }
 
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control
                 || (Control.ModifierKeys & Keys.Alt) == Keys.Alt)
             {
-                return NativeMethods.CallNextHookEx(this.handle, nCode, wParam, lParam);
+                return NativeMethods.CallNextHookEx(handle, nCode, wParam, lParam);
             }
 
             if (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN)
@@ -128,7 +123,7 @@ namespace VKey.Hook
                 var keyInfo = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
                 if (KeyFilter.Contains((Keys)keyInfo.vkCode))
                 {
-                    this.keyboard.KeyDown((Keys)keyInfo.vkCode);
+                    keyboard.KeyDown((Keys)keyInfo.vkCode);
                     return (IntPtr)1;
                 }
             } else if (wParam == (IntPtr)WM_KEYUP || wParam == (IntPtr)WM_SYSKEYUP)
@@ -136,12 +131,12 @@ namespace VKey.Hook
                 var keyInfo = Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(lParam);
                 if (KeyFilter.Contains((Keys)keyInfo.vkCode))
                 {
-                    this.keyboard.KeyUp((Keys)keyInfo.vkCode);
+                    keyboard.KeyUp((Keys)keyInfo.vkCode);
                     return (IntPtr)1;
                 }
             }
 
-            return NativeMethods.CallNextHookEx(this.handle, nCode, wParam, lParam);
+            return NativeMethods.CallNextHookEx(handle, nCode, wParam, lParam);
         }
     }
 }
