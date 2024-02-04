@@ -102,6 +102,7 @@
             this.DeviceComboBox.Size = new System.Drawing.Size(318, 22);
             this.DeviceComboBox.TabIndex = 5;
             this.DeviceComboBox.SelectionChangeCommitted += new System.EventHandler(this.DeviceComboBox_SelectionChangeCommitted);
+            this.DeviceComboBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DeviceComboBox_KeyPress);
             // 
             // GlobalHotkeyLabel
             // 

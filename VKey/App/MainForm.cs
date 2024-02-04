@@ -170,5 +170,10 @@ namespace VKey
         {
             DeviceChanged();
         }
+
+        private void DeviceComboBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled |= true;
+        }
     }
 }
