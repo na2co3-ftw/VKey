@@ -121,6 +121,11 @@ namespace VKey
 
             if (global)
             {
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    this.WindowState = FormWindowState.Normal;
+                }
+
                 keyboardHook = new KeyboardHook(computerKeyboard);
             }
             else
