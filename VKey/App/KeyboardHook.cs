@@ -90,11 +90,15 @@ namespace VKey.Hook
 
         private readonly ComputerKeyboard keyboard;
 
+        // デリゲートがGCに回収されないように保持する
+        private readonly NativeMethods.HookProc keyboardProcDelegate;
+
         public KeyboardHook(ComputerKeyboard keyboard)
         {
             this.keyboard = keyboard;
 
-            handle = NativeMethods.SetWindowsHookEx(HookType.WH_KEYBOARD_LL, KeyboardProc, IntPtr.Zero, 0);
+            keyboardProcDelegate = KeyboardProc;
+            handle = NativeMethods.SetWindowsHookEx(HookType.WH_KEYBOARD_LL, keyboardProcDelegate, IntPtr.Zero, 0);
         }
 
         public void Dispose()
